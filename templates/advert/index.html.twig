@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Advert index{% endblock %}
+
+{% block body %}
+    <h1>Advert index</h1>
+    <div>Il y a {{ adverts|length }} annonces.</div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>category</th>
+                <th>Content</th>
+                <th>Number of pictures</th>
+                <th>Author</th>
+                <th>Email</th>
+                <th>Price</th>
+                <th>State</th>
+                <th>CreatedAt</th>
+                <th>PublishedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for advert in adverts %}
+            <tr>
+                <td>{{ advert.id }}</td>
+                <td>{{ advert.title }}</td>
+                <td>{{ advert.category }}</td>
+                <td>{{ advert.content }}</td>
+                <td>{{ advert.pictures|length }}</td>
+                <td>{{ advert.author }}</td>
+                <td>{{ advert.email }}</td>
+                <td>{{ advert.price }}</td>
+                <td>{{ advert.state }}</td>
+                <td>{{ advert.createdAt ? advert.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ advert.publishedAt ? advert.publishedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_advert_show', {'id': advert.id}) }}">show</a>
+                    {#<a href="{{ path('app_advert_edit', {'id': advert.id}) }}">edit</a>#}
+                    {% if workflow_can(advert, 'publish') %}
+                    <a href="{{ path('app_advert_publish', {'id': advert.id}) }}">publish</a>
+                    {% endif %}
+                    {% if workflow_can(advert, 'reject') %}
+                    <a href="{{ path('app_advert_reject', {'id': advert.id}) }}">reject</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        {% if previous >= 0 %}
+            <a href="{{ path('app_advert_index', {offset: previous }) }}">Previous</a>
+        {% endif %}
+        {% if next < adverts|length %}
+            <a href="{{ path('app_advert_index', {offset: next }) }}">Next</a>
+        {% endif %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_advert_new') }}">Create new</a>
+{% endblock %}

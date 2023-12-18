@@ -1,0 +1,7 @@
+<a href="{{ path('app_advert_show', {'id': advert.id}) }}">show</a>
+{% if workflow_can(advert, 'publish') %}
+    <a href="{{ path('app_advert_publish', {'id': advert.id}) }}">publish</a>
+{% endif %}
+{% if workflow_can(advert, 'reject') %}
+    <a href="{{ path('app_advert_reject', {'id': advert.id}) }}">reject</a>
+{% endif %}
